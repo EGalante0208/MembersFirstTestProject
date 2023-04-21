@@ -33,12 +33,10 @@ namespace MembersFirstTestProject.Repository.Implementations
             var       json                 = await reader.ReadToEndAsync();
             var       allTransactions      = JsonSerializer.Deserialize<List<TransactionModel>>(json);
 
-            if (allTransactions != null)
+            if (allTransactions == null) return filteredTransactions;
+            foreach (var transactionModels in searchList.Select(search => allTransactions.Where(x => search.Key  == search.Value).ToList()))
             {
-                foreach (var transactionModels in searchList.Select(search => allTransactions.Where(x => search.Key  == search.Value).ToList()))
-                {
-                    filteredTransactions.AddRange(transactionModels);
-                }
+                filteredTransactions.AddRange(transactionModels);
             }
 
             return filteredTransactions;
